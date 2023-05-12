@@ -1,0 +1,33 @@
+.admin-dashboard {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .admin-dashboard h2 {
+    font-size: 24px;
+    margin-top: 0;
+    margin-bottom: 20px;
+  }
+  
+  .admin-dashboard p {
+    font-size: 16px;
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+  
+  .admin-dashboard p:last-child {
+    margin-bottom: 0;
+  }
+  
+  .showdata{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .data {
+    padding: 10px;
+  }

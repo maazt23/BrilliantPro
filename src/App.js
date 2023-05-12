@@ -6,6 +6,11 @@ import CoursesPage from "./pages/courses";
 import MaterialsPage from "./pages/materials";
 import LearnersPage from "./pages/learners";
 import Navbar from "./pages/navbar";
+import AdminDashboard from "./pages/adminDashboard";
+import CreateCourse from "./pages/courses/addcourse";
+import AssessmentCreator from "./pages/assesments";
+import Assessment from "./pages/assesments/ViewAssesments";
+import AssessmentsList from "./pages/assesments/ListAssesment";
 function App() {
   return (
     <>
@@ -55,6 +60,16 @@ function App() {
          }
          />
 
+        <Route
+         exact path="/courses/create"
+         element={
+          <div>
+            <Navbar />
+            <CreateCourse />
+          </div>
+         }
+         />
+
 
         <Route
          exact path="/materials"
@@ -83,6 +98,46 @@ function App() {
          element={
           <div>
             <Navbar />
+          </div>
+         }
+         />
+
+        <Route
+         exact path="/admindashboard"
+         element={
+          <div>
+            <Navbar />
+            <AdminDashboard />
+          </div>
+         }
+         />
+
+        <Route
+         exact path="/assesments"
+         element={
+          <div>
+            <Navbar />
+            <AssessmentsList />
+          </div>
+         }
+         />
+
+        <Route
+         exact path="/assesments/create"
+         element={
+          <div>
+            <Navbar />
+            <AssessmentCreator />
+          </div>
+         }
+         />
+
+        <Route
+         exact path="/assesments/:id"
+         element={
+          <div>
+            <Navbar />
+            <Assessment />
           </div>
          }
          />

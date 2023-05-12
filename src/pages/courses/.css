@@ -56,4 +56,8 @@ h1 {
   button:active {
     background-color: #388e3c;
   }
+
+  .addbutton {
+    background-color: #98271f;
+  }
   

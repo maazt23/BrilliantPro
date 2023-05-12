@@ -1,68 +1,96 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./.css"
+import axios from "axios";
 
 function MaterialsPage() {
-  const [materials, setMaterials] = useState([
-    { id: 1, title: "Material 1", description: "Description 1" },
-    { id: 2, title: "Material 2", description: "Description 2" },
-    { id: 3, title: "Material 3", description: "Description 3" },
-  ]);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
 
-  const handleTitleChange = (e) => {
-    setTitle(e.target.value);
-  };
+  const [materials, setMaterials] = useState([]);
 
-  const handleDescriptionChange = (e) => {
-    setDescription(e.target.value);
-  };
+
+  const [material, setMaterial] = useState({
+    "name" : "",
+    "type" : "",
+    "content" : ""
+  });
+
+  useEffect(()=>{
+    const url = 'http://182.180.54.158:10201/materials';
+    axios.get(url).then((resp)=>{
+      setMaterials(resp.data.data);
+    })
+  },[materials])
+
+
+
+
 
   const handleAddMaterial = () => {
-    const newMaterial = {
-      id: materials.length + 1,
-      title,
-      description,
-    };
-    setMaterials([...materials, newMaterial]);
-    setTitle("");
-    setDescription("");
-  };
+    const url = 'http://182.180.54.158:10201/materials/add';
+    axios.post(url,material).then((resp)=>{
+      alert(resp.data.Message)
+    })
+  }
 
   const handleDeleteMaterial = (id) => {
-    const updatedMaterials = materials.filter((material) => material.id !== id);
-    setMaterials(updatedMaterials);
+    const url = 'http://182.180.54.158:10201/materials/'+id;
+    axios.delete(url).then((resp)=>{
+      alert(resp.data.Message)
+    })
+
   };
 
   const handleEditMaterial = (id, updatedMaterial) => {
-    const updatedMaterials = materials.map((material) =>
-      material.id === id ? updatedMaterial : material
-    );
-    setMaterials(updatedMaterials);
+    // const updatedMaterials = materials.map((material) =>
+    //   material.id === id ? updatedMaterial : material
+    // );
+    // setMaterials(updatedMaterials);
   };
 
   return (
     <div>
       <h1>Materials</h1>
+
       <ul>
+      
         {materials.map((material) => (
-          <li key={material.id}>
-            <h2>{material.title}</h2>
-            <p>{material.description}</p>
-            <button onClick={() => handleDeleteMaterial(material.id)}>Delete</button>
-            <button onClick={() => handleEditMaterial(material.id, material)}>Edit</button>
+          <li key={material._id}>
+            <h2>{material.name}</h2>
+            <p>{material.type}</p>
+            <p>{material.content}</p>
+            <button onClick={() => handleDeleteMaterial(material._id)}>Delete</button>
+            <button onClick={() => handleEditMaterial(material._id, material)}>Edit</button>
           </li>
         ))}
       </ul>
+
+
       <h2>Add Material</h2>
       <form>
         <label>
-          Title:
-          <input type="text" value={title} onChange={handleTitleChange} />
+          Name:
+          <input type="text" value={material.name} 
+              onChange={(e) => 
+                setMaterial({ ...material, name: e.target.value })
+              }
+          />
+
         </label>
         <label>
-          Description:
-          <input type="text" value={description} onChange={handleDescriptionChange} />
+          Type:
+          <input type="text" value={material.type} 
+            onChange={(e) => 
+              setMaterial({ ...material, type: e.target.value })
+            }
+          />
+        </label>
+
+        <label>
+          Content:
+          <input type="text" value={material.content} 
+            onChange={(e) => 
+              setMaterial({ ...material, content: e.target.value })
+            }
+          />
         </label>
         <button type="button" onClick={handleAddMaterial}>Add Material</button>
       </form>
