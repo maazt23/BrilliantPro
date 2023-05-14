@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
 function Assessment() {
+  const { id } = useParams();
     const a = {
     "title": "Dummy Assessment",
     "questions": [
@@ -36,14 +38,15 @@ function Assessment() {
     }
     const [assessment, setAssessment] = useState(a);
 
-//   useEffect(() => {
-//     async function fetchAssessments() {
-//       const response = await axios.get('/api/assessments');
-//       setAssessments(response.data);
-//     }
-//     fetchAssessments();
-//   }, []);
 
+    useEffect(()=>{
+      const url = process.env.REACT_APP_API_URL + "/assesments/" + id;
+      console.log(url);
+      axios.get(url).then((resp)=>{
+        console.log(resp);
+        setAssessment(resp.data.data);
+      })
+    },[])
 
 
   return (
@@ -51,10 +54,13 @@ function Assessment() {
       <h2>Assessment</h2>
         <div key={assessment._id}>
           <h3>{assessment.title}</h3>
+          <h4>{assessment.description}</h4>
+          <h5>{assessment.duration} Minutes</h5>
+          <h5>{assessment.passing} % Passing Criteria</h5>
 
-          {assessment.questions.map(question => (
+          {assessment.questions.map((question,index) => (
             <div key={question._id}>
-              <p>{question.text}</p>
+              <p>Q{index+1}:- {question.text}</p>
 
               {question.options.map(option => (
                 <div key={option._id}>

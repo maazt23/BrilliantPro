@@ -1,59 +1,48 @@
-import React, { useState } from "react";
-
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 function LearnersPage() {
-  const [learners, setLearners] = useState([
-    { id: 1, name: "Learner 1", email: "learner1@example.com" },
-    { id: 2, name: "Learner 2", email: "learner2@example.com" },
-    { id: 3, name: "Learner 3", email: "learner3@example.com" },
-  ]);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-
-  const handleNameChange = (e) => {
-    setName(e.target.value);
-  };
-
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handleAddLearner = () => {
-    const newLearner = {
-      id: learners.length + 1,
-      name,
-      email,
-    };
-    setLearners([...learners, newLearner]);
-    setName("");
-    setEmail("");
-  };
+  const [learners, setLearners] = useState([]);
 
   const handleDeleteLearner = (id) => {
-    const updatedLearners = learners.filter((learner) => learner.id !== id);
-    setLearners(updatedLearners);
+    const url = process.env.REACT_APP_API_URL + "/users/" + id;
+    axios.delete(url).then((resp)=>{
+      alert(resp.data.Message)
+    })
   };
 
   const handleEditLearner = (id, updatedLearner) => {
-    const updatedLearners = learners.map((learner) =>
-      learner.id === id ? updatedLearner : learner
-    );
-    setLearners(updatedLearners);
+    // const updatedLearners = learners.map((learner) =>
+    //   learner.id === id ? updatedLearner : learner
+    // );
+    // setLearners(updatedLearners);
   };
+
+  useEffect(()=>{
+    const url = process.env.REACT_APP_API_URL + "/users";
+    axios.get(url).then((resp)=>{
+      setLearners(resp.data.data);
+    })
+  },[learners])
+
 
   return (
     <div>
       <h1>Learners</h1>
       <ul>
         {learners.map((learner) => (
-          <li key={learner.id}>
+          learner.role === "learner" ?
+            <li key={learner._id}>
             <h2>{learner.name}</h2>
             <p>{learner.email}</p>
-            <button onClick={() => handleDeleteLearner(learner.id)}>Delete</button>
-            <button onClick={() => handleEditLearner(learner.id, learner)}>Edit</button>
-          </li>
+             <p>Joined: {learner.createdAt}</p>
+            <button onClick={() => handleDeleteLearner(learner._id)}>Delete</button>
+            <button onClick={() => handleEditLearner(learner._id, learner)}>Edit</button>
+ 
+             </li>
+             : ""
         ))}
       </ul>
-      <h2>Add Learner</h2>
+      {/* <h2>Add Learner</h2>
       <form>
         <label>
           Name:
@@ -64,7 +53,7 @@ function LearnersPage() {
           <input type="text" value={email} onChange={handleEmailChange} />
         </label>
         <button type="button" onClick={handleAddLearner}>Add Learner</button>
-      </form>
+      </form> */}
     </div>
   );
 }

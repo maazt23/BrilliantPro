@@ -16,12 +16,12 @@ const SignUpPage = () => {
     event.preventDefault();
     // Here you can implement your signup logic
     console.log(`Email: ${email}\nPassword: ${password}\nRole: ${role}`);
-    const url = 'http://182.180.54.158:10201/users/add';
+    const url = process.env.REACT_APP_API_URL + "/users/add";
     const data = {
-    name: name,
-    email: email,
-    password: password,
-    role: role
+      name: name,
+      email: email,
+      password: password,
+      role: role
     };
     axios.post(url, data)
     .then(response => {

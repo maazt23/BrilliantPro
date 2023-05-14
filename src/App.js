@@ -1,5 +1,5 @@
-import {React} from "react";
-import { Route,BrowserRouter as Router,Routes } from "react-router-dom";
+import React, { useState } from 'react';
+import { Route,BrowserRouter as Router,Routes, Navigate  } from "react-router-dom";
 import SignUpPage from "./pages/signup";
 import LoginPage from "./pages/login";
 import CoursesPage from "./pages/courses";
@@ -11,11 +11,33 @@ import CreateCourse from "./pages/courses/addcourse";
 import AssessmentCreator from "./pages/assesments";
 import Assessment from "./pages/assesments/ViewAssesments";
 import AssessmentsList from "./pages/assesments/ListAssesment";
+import ShowCourse from "./pages/courses/ShowCourse";
+import LearnerDashboard from './pages/learnerdashboard';
+
 function App() {
+  const u = localStorage.getItem('user')
+  const [user,setUser] = useState(u);
   return (
     <>
     <Router>
       <Routes>
+
+        <Route
+          exact path="/"
+          element={
+            <div>
+              <Navbar user={user} setUser={setUser} />
+              {
+                user && user.Role === "admin" ? 
+                    <Navigate to="/admindashboard" />
+                : (
+                  user && user.Role === "learner" ?
+                  <Navigate to="/learnerdashboard" /> : ""
+                )  
+              }            
+            </div>
+          }
+         />
 
         <Route
          exact path="/signup"
@@ -28,23 +50,12 @@ function App() {
          />
 
 
-         <Route
-         exact path="/testpage"
-         element={
-          <div>
-            <Navbar />
-            hi
-          </div>
-         }
-         />
-
-
         <Route
-         exact path="/loginpage"
+         exact path="/login"
          element={
           <div>
-            <Navbar />
-            <LoginPage />
+              <Navbar user={user} setUser={setUser} />
+              <LoginPage setUser={setUser} />
           </div>
          }
          />
@@ -54,7 +65,7 @@ function App() {
          exact path="/courses"
          element={
           <div>
-            <Navbar />
+            <Navbar user={user} setUser={setUser} />
             <CoursesPage />
           </div>
          }
@@ -64,7 +75,7 @@ function App() {
          exact path="/courses/create"
          element={
           <div>
-            <Navbar />
+            <Navbar user={user} setUser={setUser} />
             <CreateCourse />
           </div>
          }
@@ -75,7 +86,7 @@ function App() {
          exact path="/materials"
          element={
           <div>
-            <Navbar />
+            <Navbar user={user} setUser={setUser} />
             <MaterialsPage />
           </div>
          }
@@ -86,37 +97,47 @@ function App() {
          exact path="/learners"
          element={
           <div>
-            <Navbar />
+            <Navbar user={user} setUser={setUser} />
             <LearnersPage />
           </div>
          }
          />
          
 
-         <Route
-         exact path="/addmaterials"
-         element={
-          <div>
-            <Navbar />
-          </div>
-         }
-         />
-
         <Route
          exact path="/admindashboard"
          element={
           <div>
-            <Navbar />
+            <Navbar user={user} setUser={setUser} />
             <AdminDashboard />
           </div>
          }
          />
 
         <Route
+         exact path="/learnerdashboard"
+         element={
+          <div>
+            <Navbar user={user} setUser={setUser} />
+            <LearnerDashboard  user={user} setUser={setUser}/>
+          </div>
+         }
+        />
+
+        <Route
+         exact path="/learnercourse/:id"
+         element={
+          <div>
+            <Navbar user={user} setUser={setUser} />
+          </div>
+         }
+        />
+
+        <Route
          exact path="/assesments"
          element={
           <div>
-            <Navbar />
+            <Navbar user={user} setUser={setUser} />
             <AssessmentsList />
           </div>
          }
@@ -126,7 +147,7 @@ function App() {
          exact path="/assesments/create"
          element={
           <div>
-            <Navbar />
+            <Navbar user={user} setUser={setUser} />
             <AssessmentCreator />
           </div>
          }
@@ -136,8 +157,18 @@ function App() {
          exact path="/assesments/:id"
          element={
           <div>
-            <Navbar />
+            <Navbar user={user} setUser={setUser} />
             <Assessment />
+          </div>
+         }
+         />
+
+        <Route
+         exact path="/courses/:id"
+         element={
+          <div>
+            <Navbar user={user} setUser={setUser} />
+            <ShowCourse />
           </div>
          }
          />

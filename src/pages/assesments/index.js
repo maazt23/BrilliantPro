@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import axios from 'axios';
 function AssessmentCreator() {
     const [questions, setQuestions] = useState([{ text: '', options: [] }]);
     const [assesment,setAssesment] = useState({'name':'','duration' : 0,'passing' : 0});
@@ -47,13 +47,19 @@ function AssessmentCreator() {
     event.preventDefault();
 
     const data = {
-        'name' : assesment.name,
+        'title' : assesment.name,
+        'description' : assesment.description,
         'duration' : assesment.duration,
         'passing' : assesment.passing,
         'questions' : questions
     }
     console.log(data);
     // send questions and options to the server
+    const url = process.env.REACT_APP_API_URL +  "/assesments/add";
+        axios.post(url,data).then((resp)=>{
+            console.log(resp);
+            alert(resp.data.Message)
+        })
   };
 
   return (
@@ -67,6 +73,17 @@ function AssessmentCreator() {
             placeholder='Name'
             value={assesment.name} 
             onChange={(event) => setAssesment({...assesment,name : event.target.value})} 
+        />
+        </label>
+
+        <label>
+        Description
+        <input 
+            type="text" 
+            name="description" 
+            placeholder='description'
+            value={assesment.description} 
+            onChange={(event) => setAssesment({...assesment,description : event.target.value})} 
         />
         </label>
 

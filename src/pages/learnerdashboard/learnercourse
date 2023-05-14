@@ -1,0 +1,43 @@
+import axios from 'axios';
+import React,{useEffect,useState} from 'react';
+import { Link } from "react-router-dom";
+import { useParams } from 'react-router-dom';
+
+
+function LearnerCourse(props) {
+    const { id } = useParams();
+
+    const [materials, setMaterials] = useState([{name : "dw"}]);
+    const [assesments, setAssesments] = useState([]);
+
+  useEffect(()=>{
+    var url = process.env.REACT_APP_API_URL + "/courses/" + id;
+    console.log(url);
+    axios.get(url).then((resp)=>{
+      setMaterials(resp.data.data[0].materials);
+      setAssesments(resp.data.data[0].assesments);
+    })
+
+
+  },[])
+    return (
+        <div> 
+            <div>
+               <h1> Materials </h1>
+            </div>
+
+            <div>
+            <h2>Materials</h2>
+            <ul>
+                { materials.map((material,index) => (
+                    <li key={material._id}>
+                    {index+1}:- <Link to={`/materials/${material._id}`}>{material.name}</Link>
+                    </li>
+                ))}
+            </ul>
+            </div>
+        </div>
+    );
+}
+
+export default LearnerCourse;

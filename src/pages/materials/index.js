@@ -14,7 +14,7 @@ function MaterialsPage() {
   });
 
   useEffect(()=>{
-    const url = 'http://182.180.54.158:10201/materials';
+    const url = process.env.REACT_APP_API_URL + "/materials";
     axios.get(url).then((resp)=>{
       setMaterials(resp.data.data);
     })
@@ -25,14 +25,14 @@ function MaterialsPage() {
 
 
   const handleAddMaterial = () => {
-    const url = 'http://182.180.54.158:10201/materials/add';
+    const url = process.env.REACT_APP_API_URL + '/materials/add';
     axios.post(url,material).then((resp)=>{
       alert(resp.data.Message)
     })
   }
 
   const handleDeleteMaterial = (id) => {
-    const url = 'http://182.180.54.158:10201/materials/'+id;
+    const url = process.env.REACT_APP_API_URL + '/materials/'+id;
     axios.delete(url).then((resp)=>{
       alert(resp.data.Message)
     })

@@ -3,35 +3,24 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 function AssessmentsList() {
-  const [assessments, setAssessments] = useState([
-    {
-      _id: 1,
-      name: 'Assessment 1',
-      duration: 60,
-      passing: 80
-    },
-    {
-      _id: 2,
-      name: 'Assessment 2',
-      duration: 45,
-      passing: 75
-    },
-    {
-      _id: 3,
-      name: 'Assessment 3',
-      duration: 90,
-      passing: 85
-    }
-  ]
-  );
+  const [assessments, setAssessments] = useState([]);
 
-//   useEffect(() => {
-//     async function fetchAssessments() {
-//       const response = await axios.get('/api/assessments');
-//       setAssessments(response.data);
-//     }
-//     fetchAssessments();
-//   }, []);
+
+  const handleDelete = (id) => {
+    const url = process.env.REACT_APP_API_URL + "/assesments/"+id;
+    // console.log(url);
+    axios.delete(url).then((resp)=>{
+      alert(resp.data.Message)
+    })
+  };
+
+  useEffect(()=>{
+    const url = process.env.REACT_APP_API_URL + "/assesments";
+    // console.log(url);
+    axios.get(url).then((resp)=>{
+      setAssessments(resp.data.data);
+    })
+  },[assessments])
 
   return (
     <div>
@@ -42,20 +31,26 @@ function AssessmentsList() {
             <th>Name</th>
             <th>Duration</th>
             <th>Passing Criteria</th>
+            <th>Button</th>
           </tr>
         </thead>
         <tbody>
           {assessments.map(assessment => (
             <tr key={assessment._id}>
               <td>
-                <Link to={`/assesments/${assessment._id}`}>{assessment.name}</Link>
+                <Link to={`/assesments/${assessment._id}`}>{assessment.title}</Link>
               </td>
               <td>{assessment.duration} minutes</td>
-              <td>{assessment.passingCriteria}%</td>
+              <td>{assessment.passing}%</td>
+              <button onClick={() => handleDelete(assessment._id)}>Delete</button>
             </tr>
           ))}
         </tbody>
       </table>
+      <h2>Add Assessment</h2>
+      <button>
+        <Link to={'/assesments/create'}>Add Assessment </Link>
+      </button>
     </div>
   );
 }
