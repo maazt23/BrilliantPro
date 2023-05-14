@@ -13,6 +13,7 @@ import Assessment from "./pages/assesments/ViewAssesments";
 import AssessmentsList from "./pages/assesments/ListAssesment";
 import ShowCourse from "./pages/courses/ShowCourse";
 import LearnerDashboard from './pages/learnerdashboard';
+import Quiz from './pages/test';
 
 function App() {
   const u = localStorage.getItem('user')
@@ -60,6 +61,15 @@ function App() {
          }
          />
 
+        <Route
+         exact path="/test"
+         element={
+          <div>
+              <Navbar user={user} setUser={setUser} />
+              <Quiz />
+          </div>
+         }
+         />
 
         <Route
          exact path="/courses"
